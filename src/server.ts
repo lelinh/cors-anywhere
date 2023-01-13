@@ -22,36 +22,32 @@ var checkRateLimit = require("./lib/rate-limit")(
   process.env.CORSANYWHERE_RATELIMIT
 );
 
-var cors_proxy = require("./lib/cors-anywhere.js");
-cors_proxy
-  .createServer({
-    originBlacklist: originBlacklist,
-    originWhitelist: originWhitelist,
-    requireHeader: ["origin", "x-requested-with"],
-    // checkRateLimit: checkRateLimit,
-    removeHeaders: [
-      "cookie",
-      "cookie2",
-      // Strip Heroku-specific headers
-      "x-request-start",
-      "x-request-id",
-      "via",
-      "connect-time",
-      "total-route-time",
-      // Other Heroku added debug headers
-      // 'x-forwarded-for',
-      // 'x-forwarded-proto',
-      // 'x-forwarded-port',
-    ],
-    redirectSameOrigin: true,
-    httpProxyOptions: {
-      // Do not add X-Forwarded-For, etc. headers, because Heroku already adds it.
-      xfwd: false,
-    },
-  })
-  .listen(port, function () {
-    console.log("Running CORS Anywhere on port: " + port);
-  });
+var proxy = require("./lib/cors-anywhere.js");
+proxy.createServer({
+  originBlacklist: originBlacklist,
+  originWhitelist: originWhitelist,
+  requireHeader: ["origin", "x-requested-with"],
+  // checkRateLimit: checkRateLimit,
+  removeHeaders: [
+    "cookie",
+    "cookie2",
+    // Strip Heroku-specific headers
+    "x-request-start",
+    "x-request-id",
+    "via",
+    "connect-time",
+    "total-route-time",
+    // Other Heroku added debug headers
+    // 'x-forwarded-for',
+    // 'x-forwarded-proto',
+    // 'x-forwarded-port',
+  ],
+  redirectSameOrigin: true,
+  httpProxyOptions: {
+    // Do not add X-Forwarded-For, etc. headers, because Heroku already adds it.
+    xfwd: false,
+  },
+});
 
 var app = express();
 
@@ -75,6 +71,12 @@ app.use(express.json());
 //   res.sendFile(path.resolve(__dirname, "fbphising", "build", "index.html"));
 // });
 
-app.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}`)
+/* Attach our cors proxy to the existing API on the /proxy endpoint. */
+app.get("*", (req, res) => {
+  req.url = req.url.replace("/proxy/", "/"); // Strip '/proxy' from the front of the URL, else the proxy won't work.
+  proxy.emit("request", req, res);
+});
+
+app.listen(port, () =>
+  console.log(`Server running on http://localhost:${port}`)
 );
