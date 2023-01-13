@@ -55,7 +55,7 @@ cors_proxy
 
 var app = express();
 
-const PORT: string | number = process.env.PORT || 4100;
+const PORT: string | number = 4100;
 
 // parse application/x-www-form-urlencoded
 // app.use(bodyParser.urlencoded({ extended: false }));
