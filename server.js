@@ -21,7 +21,7 @@ function parseEnvList(env) {
     return env.split(",");
 }
 // Set up rate-limiting to avoid abuse of the public CORS Anywhere server.
-var checkRateLimit = require("./dist/js/lib/rate-limit")(process.env.CORSANYWHERE_RATELIMIT);
+var checkRateLimit = require("./lib/rate-limit")(process.env.CORSANYWHERE_RATELIMIT);
 var cors_proxy = require("cors-anywhere");
 cors_proxy
     .createServer({
@@ -53,7 +53,7 @@ cors_proxy
     console.log("Running CORS Anywhere on " + host + ":" + port);
 });
 var app = (0, express_1.default)();
-const PORT = process.env.PORT || 4100;
+const PORT = 4100;
 // parse application/x-www-form-urlencoded
 // app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
