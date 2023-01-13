@@ -49,8 +49,8 @@ var proxy = corsAnywhere.createServer({
   requireHeaders: [], // Do not require any headers.
   removeHeaders: [], // Do not remove any headers.
 });
-app.get("/", (req, res) => {
-  res.send({});
+app.get("/healthz", (req, res) => {
+  res.send("OK");
 });
 /* Attach our cors proxy to the existing API on the /proxy endpoint. */
 app.get("*", (req, res) => {
