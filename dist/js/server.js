@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 // Listen on a specific host via the HOST environment variable
 var host = process.env.HOST || "0.0.0.0";
 // Listen on a specific port via the PORT environment variable
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || "8080";
 // Grab the blacklist from the command-line so that we can update the blacklist without deploying
 // again. CORS Anywhere is open by design, and this blacklist is not used, except for countering
 // immediate abuse (e.g. denial of service). If you want to block all origins except for some,
@@ -48,4 +48,4 @@ app.get("*", (req, res) => {
     req.url = req.url.replace("/proxy/", "/"); // Strip '/proxy' from the front of the URL, else the proxy won't work.
     proxy.emit("request", req, res);
 });
-app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+app.listen(8000, host, () => console.log(`Server running on http://localhost:${port}`));
