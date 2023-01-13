@@ -22,36 +22,16 @@ var checkRateLimit = require("./lib/rate-limit")(
   process.env.CORSANYWHERE_RATELIMIT
 );
 
-var proxy = require("./lib/cors-anywhere.js");
-proxy.createServer({
-  originBlacklist: originBlacklist,
-  originWhitelist: originWhitelist,
-  requireHeader: ["origin", "x-requested-with"],
-  // checkRateLimit: checkRateLimit,
-  removeHeaders: [
-    "cookie",
-    "cookie2",
-    // Strip Heroku-specific headers
-    "x-request-start",
-    "x-request-id",
-    "via",
-    "connect-time",
-    "total-route-time",
-    // Other Heroku added debug headers
-    // 'x-forwarded-for',
-    // 'x-forwarded-proto',
-    // 'x-forwarded-port',
-  ],
-  redirectSameOrigin: true,
-  httpProxyOptions: {
-    // Do not add X-Forwarded-For, etc. headers, because Heroku already adds it.
-    xfwd: false,
-  },
+var corsAnywhere = require("cors-anywhere");
+let proxy = corsAnywhere.createServer({
+  originWhitelist: [], // Allow all origins
+  requireHeaders: [], // Do not require any headers.
+  removeHeaders: [], // Do not remove any headers.
 });
 
 var app = express();
 
-const PORT: string | number = 4100;
+// const PORT: string | number = 4100;
 
 // parse application/x-www-form-urlencoded
 // app.use(bodyParser.urlencoded({ extended: false }));
