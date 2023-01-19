@@ -64,6 +64,16 @@ app.get("*", (req, res) => {
   }
 });
 
+app.post("*", (req, res) => {
+  console.log(`Req to: ${req.url}`);
+
+  if (req.url === "/") {
+    res.send({});
+  } else {
+    proxy.emit("request", req, res);
+  }
+});
+
 app.listen(port, () =>
   console.log(`Server running on http://localhost:${port}`)
 );
