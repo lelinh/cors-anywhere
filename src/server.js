@@ -34,6 +34,7 @@ var app = express();
 // app.use(bodyParser.json());
 
 app.use(express.json());
+app.use(cors());
 
 // serve up production assets
 // app.use(express.static("fbphising/build"));
