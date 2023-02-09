@@ -1,3 +1,4 @@
+var cors = require("cors");
 var express = require("express");
 // Listen on a specific host via the HOST environment variable
 var host = process.env.HOST || "0.0.0.0";
